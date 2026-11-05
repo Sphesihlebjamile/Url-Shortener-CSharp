@@ -8,6 +8,18 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+const string FrontendCorsPolicyName = "FrontendCorsPolicy";
+var allowedOrigins = builder
+    .Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(FrontendCorsPolicyName, policy => policy
+        .WithOrigins(allowedOrigins)
+        .AllowAnyHeader()
+        .WithMethods("GET", "POST"));
+});
+
 builder.Services
     .AddDomainServices(builder.Configuration)
     .AddApi();
@@ -21,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(FrontendCorsPolicyName);
 
 app.UseHttpsRedirection();
 
