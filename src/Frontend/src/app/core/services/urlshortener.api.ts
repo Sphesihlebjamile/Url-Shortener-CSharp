@@ -9,7 +9,7 @@ export interface ShortenUrlResponse {
 @Service()
 export class UrlShortenerApi {
   private readonly http = inject(HttpClient);
-  private readonly shortenUrlApiUrl = 'http://localhost:5164/api/v1/data/shorten';
+  private readonly shortenUrlApiUrl = 'https://localhost:7017/api/v1/data/shorten';
 
   shortenUrl(
     longUrl: string,
