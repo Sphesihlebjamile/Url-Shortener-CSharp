@@ -1,15 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { UrlShortenerApi } from '../core/services/urlshortener.api';
 import { copyToClipboard } from './urlshortener.functions';
 
 const ShortUrlDefault: string = '...';
-const ShortenUrlApiUrl: string = 'http://localhost:5164/api/v1/data/shorten';
-
-interface ShortenUrlResponse {
-  shortUrl: string;
-  serverTime: number;
-}
 
 @Component({
   imports: [FormsModule],
@@ -18,7 +13,7 @@ interface ShortenUrlResponse {
   templateUrl: './urlshortener.html',
 })
 export class Urlshortener {
-  private readonly http = inject(HttpClient);
+  private readonly urlShortenerApi = inject(UrlShortenerApi);
 
   longUrl: string = '';
   readonly longUrlErrors = signal<string[]>([]);
@@ -36,17 +31,18 @@ export class Urlshortener {
     this.clearLongUrlErrors();
     this.isGenerating.set(true);
 
-    this.http.post<ShortenUrlResponse>(ShortenUrlApiUrl, { longUrl: this.longUrl }).subscribe({
-      next: (response) => {
+    this.urlShortenerApi.shortenUrl(
+      this.longUrl,
+      (response) => {
         this.shortUrl.set(response.shortUrl);
         this.isGenerating.set(false);
       },
-      error: (error: HttpErrorResponse) => {
+      (error: HttpErrorResponse) => {
         this.shortUrl.set(ShortUrlDefault);
         this.isGenerating.set(false);
         this.longUrlErrors.set([this.getApiErrorMessage(error)]);
-      }
-    });
+      },
+    );
   }
 
   private getApiErrorMessage(error: HttpErrorResponse): string {
