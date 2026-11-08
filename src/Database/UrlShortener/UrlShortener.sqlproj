@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Security\" />
-    <Folder Include="dbo\StoredProcedures\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\UserDefinedTypes\" />
     <Folder Include="dbo\Views\" />
