@@ -23,7 +23,9 @@ internal static class ServiceCollectionRegistration
         internal IServiceCollection AddApplication()
         {
             services.AddScoped(typeof(IUrlShortenerOrchestrator), typeof(UrlShortenerOrchestrator));
+            services.AddScoped(typeof(ILongUrlOrchestrator), typeof(LongUrlOrchestrator));
             services.AddScoped(typeof(IUrlShortenerPlan), typeof(UrlShortenerPlan));
+            services.AddScoped(typeof(ILongUrlPlan), typeof(LongUrlPlan));
             services.AddScoped<IBase62Converter, Base62Converter>();
 
             services.AddOptions<ShortenerSettings>()

@@ -18,6 +18,14 @@ public static class DataEndpoints
             .Produces<ApiDataResponse>(StatusCodes.Status201Created, contentType: "application/json")
             .Produces<ApiErrorResponse>(StatusCodes.Status422UnprocessableEntity);
 
+        group.MapGet("/long/{shortUrlCode}", GetLongUrl)
+            .WithName("GetLongUrl")
+            .WithDisplayName("Get Long URL Endpoint")
+            .WithDescription("Accepts a shortened URL as input and returns the original long URL")
+            .AllowAnonymous()
+            .Produces<ApiLongUrlResponse>(StatusCodes.Status200OK, contentType: "application/json")
+            .Produces<ApiErrorResponse>(StatusCodes.Status404NotFound);
+
         return builder;
     }
 
@@ -52,5 +60,25 @@ public static class DataEndpoints
 
         // return response
         return Results.Created("/data/shorten", response);
+    }
+
+    public static async Task<IResult> GetLongUrl(
+        [FromRoute] string shortUrlCode,
+        HttpContext httpContext,
+        ILongUrlOrchestrator orchestrator)
+    {
+        var timer = Stopwatch.StartNew();
+
+        var results = await orchestrator.ExecuteAsync(shortUrlCode);
+
+        timer.Stop();
+
+        var response = new ApiLongUrlResponse()
+        {
+            LongUrl = results.LongUrl,
+            ServerTime = timer.ElapsedMilliseconds
+        };
+
+        return Results.Json(data: response, statusCode: StatusCodes.Status301MovedPermanently);
     }
 }
