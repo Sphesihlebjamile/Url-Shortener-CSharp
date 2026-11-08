@@ -6,5 +6,6 @@ import { Urlshortener } from './urlshortener/urlshortener';
 export const routes: Routes = [
   { path: '', component: Urlshortener },
   { path: '404', component: NotFound },
+  { path: ':shortUrlCode', component: Longurl },
   { path: '**', redirectTo: '/404' },
 ];

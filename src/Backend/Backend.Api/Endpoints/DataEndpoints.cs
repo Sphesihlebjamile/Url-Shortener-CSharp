@@ -1,4 +1,4 @@
-﻿namespace Backend.Api.Endpoints;
+namespace Backend.Api.Endpoints;
 
 public static class DataEndpoints
 {
@@ -85,6 +85,6 @@ public static class DataEndpoints
             ServerTime = timer.ElapsedMilliseconds
         };
 
-        return Results.Json(data: response, statusCode: StatusCodes.Status301MovedPermanently);
+        return Results.Ok(response);
     }
 }
