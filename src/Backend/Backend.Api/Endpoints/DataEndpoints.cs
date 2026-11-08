@@ -69,6 +69,12 @@ public static class DataEndpoints
     {
         var timer = Stopwatch.StartNew();
 
+        var validationResult = LongUrlRequestValidator.ValidateLongUrl(shortUrlCode);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.FromFluentValidationException(httpContext.Request.Path, StatusCodes.Status422UnprocessableEntity);
+        }
+
         var results = await orchestrator.ExecuteAsync(shortUrlCode);
 
         timer.Stop();
