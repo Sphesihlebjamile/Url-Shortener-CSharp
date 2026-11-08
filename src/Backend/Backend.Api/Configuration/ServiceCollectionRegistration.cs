@@ -10,6 +10,9 @@ internal static class ServiceCollectionRegistration
             services.AddValidation();
             services.AddApplication();
 
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
+
             return services;
         }
 
