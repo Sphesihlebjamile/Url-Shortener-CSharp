@@ -5,5 +5,5 @@ public interface IUrlShortenerDb
     Task<long> GetLatestUrlsIdAsync(CancellationToken cancellationToken);
     Task<string?> GetShortUrlCodeByLongUrlAsync(string longUrl, CancellationToken cancellationToken);
     Task<bool> InsertNewUrlAsync(long id, string longUrl, string shortUrl, CancellationToken cancellationToken);
-    Task<string> GetLongUrlByShortUrlCode(string shortUrlCode, CancellationToken cancellationToken);
+    Task<string?> GetLongUrlByShortUrlCode(string shortUrlCode, CancellationToken cancellationToken);
 }

@@ -57,7 +57,7 @@ public sealed class UrlShortenerDb : IUrlShortenerDb
         return data.First() > 0;
     }
 
-    public async Task<string> GetLongUrlByShortUrlCode(string shortUrlCode, CancellationToken cancellationToken)
+    public async Task<string?> GetLongUrlByShortUrlCode(string shortUrlCode, CancellationToken cancellationToken)
     {
         await using var connection = this.OpenConnection();
 
@@ -69,6 +69,6 @@ public sealed class UrlShortenerDb : IUrlShortenerDb
 
         var data = await connection.QueryAsync<string>(command);
 
-        return data.First();
+        return data.FirstOrDefault();
     }
 }
