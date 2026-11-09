@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Longurl } from './longurl/longurl';
 import { NotFound } from './not-found';
-import { Home } from './pages/urlshortener/home';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
   { path: '', component: Home },
