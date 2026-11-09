@@ -1,5 +1,5 @@
 import { Component, Input, signal, WritableSignal } from '@angular/core';
-import { copyToClipboard } from '../../pages/home/home.functions';
+import { copyToClipboard } from '../../core/utilities/clipboard.functions';
 
 const ShortUrlDefault: string = '...';
 
