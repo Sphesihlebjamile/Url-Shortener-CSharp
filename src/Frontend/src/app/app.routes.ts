@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Longurl } from './longurl/longurl';
+import { Longurl } from './pages/longurl/longurl';
 import { NotFound } from './not-found';
 import { Home } from './pages/home/home';
 

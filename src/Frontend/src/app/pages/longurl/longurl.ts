@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UrlShortenerApi } from '../core/services/urlshortener.api';
+import { UrlShortenerApi } from '../../core/services/urlshortener.api';
 
 @Component({
   selector: 'app-longurl',
