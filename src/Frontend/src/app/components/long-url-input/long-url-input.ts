@@ -1,30 +1,28 @@
-import { Component, inject, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UrlShortenerApi } from '../core/services/urlshortener.api';
-import { copyToClipboard } from './urlshortener.functions';
-
-const ShortUrlDefault: string = '...';
+import { UrlShortenerApi } from '../../core/services/urlshortener.api';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ShortUrlDefault } from '../../core/constants/urlshortener.constants';
 
 @Component({
   imports: [FormsModule],
-  selector: 'app-urlshortener',
-  styleUrl: './urlshortener.css',
-  templateUrl: './urlshortener.html',
+  selector: 'app-long-url-input',
+  templateUrl: './long-url-input.html',
 })
-export class Urlshortener {
+export class LongUrlInput {
   private readonly urlShortenerApi = inject(UrlShortenerApi);
 
-  longUrl: string = '';
+  private longUrl: string = '';
   readonly longUrlErrors = signal<string[]>([]);
-  readonly shortUrl = signal<string>(ShortUrlDefault);
   readonly isGenerating = signal(false);
+
+  shortUrl = output<string>();
 
   handleSubmit = (): void => {
     const validationResult = this.validateLongUrl();
 
     if (!validationResult) {
-      this.shortUrl.set(ShortUrlDefault);
+      this.shortUrl.emit(ShortUrlDefault);
       return;
     }
 
@@ -34,23 +32,15 @@ export class Urlshortener {
     this.urlShortenerApi.shortenUrl(
       this.longUrl,
       (response) => {
-        this.shortUrl.set(response.shortUrl);
+        this.shortUrl.emit(response.shortUrl);
         this.isGenerating.set(false);
       },
       (error: HttpErrorResponse) => {
-        this.shortUrl.set(ShortUrlDefault);
+        this.shortUrl.emit(ShortUrlDefault);
         this.isGenerating.set(false);
         this.longUrlErrors.set([this.getApiErrorMessage(error)]);
       },
     );
-  }
-
-  private getApiErrorMessage(error: HttpErrorResponse): string {
-    if (error.status === 0) {
-      return 'Unable to connect to the local API.';
-    }
-
-    return error.error?.title ?? error.message ?? 'Failed to generate the short URL.';
   }
 
   validateLongUrl = (): boolean => {
@@ -68,14 +58,15 @@ export class Urlshortener {
     return errors.length === 0;
   }
 
-  copyToClipboard = async (): Promise<void> => {
-    var response = await copyToClipboard(this.shortUrl())
-    if(!response){
-      alert("Failed to copy to clipboard");
-    }
-  }
-
   clearLongUrlErrors = (): void => {
     this.longUrlErrors.set([]);
+  }
+
+  private getApiErrorMessage(error: HttpErrorResponse): string {
+    if (error.status === 0) {
+      return 'Unable to connect to the local API.';
+    }
+
+    return error.error?.title ?? error.message ?? 'Failed to generate the short URL.';
   }
 }
