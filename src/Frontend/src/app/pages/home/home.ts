@@ -1,73 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UrlShortenerApi } from '../../core/services/urlshortener.api';
+import { LongUrlInput } from '../../components/long-url-input/long-url-input';
 import { ShortUrlDisplay } from '../../components/short-url-display/short-url-display';
 
 const ShortUrlDefault: string = '...';
 
 @Component({
-  imports: [FormsModule, ShortUrlDisplay],
+  imports: [FormsModule, LongUrlInput, ShortUrlDisplay],
   selector: 'app-home',
   templateUrl: './home.html',
 })
 export class Home {
-  private readonly urlShortenerApi = inject(UrlShortenerApi);
-
-  longUrl: string = '';
-  readonly longUrlErrors = signal<string[]>([]);
   readonly shortUrl = signal<string>(ShortUrlDefault);
-  readonly isGenerating = signal(false);
 
-  handleSubmit = (): void => {
-    const validationResult = this.validateLongUrl();
-
-    if (!validationResult) {
-      this.shortUrl.set(ShortUrlDefault);
-      return;
-    }
-
-    this.clearLongUrlErrors();
-    this.isGenerating.set(true);
-
-    this.urlShortenerApi.shortenUrl(
-      this.longUrl,
-      (response) => {
-        this.shortUrl.set(response.shortUrl);
-        this.isGenerating.set(false);
-      },
-      (error: HttpErrorResponse) => {
-        this.shortUrl.set(ShortUrlDefault);
-        this.isGenerating.set(false);
-        this.longUrlErrors.set([this.getApiErrorMessage(error)]);
-      },
-    );
-  }
-
-  private getApiErrorMessage(error: HttpErrorResponse): string {
-    if (error.status === 0) {
-      return 'Unable to connect to the local API.';
-    }
-
-    return error.error?.title ?? error.message ?? 'Failed to generate the short URL.';
-  }
-
-  validateLongUrl = (): boolean => {
-    let errors: string[] = [];
-    if(!this.longUrl){
-      errors = [...errors, "A long Url is required"]
-    }
-    if(this.longUrl.length < 10){
-      errors = [...errors, "Long Url is too short"]
-    }
-    if(this.longUrl.length > 999){
-      errors = [...errors, "Long Url is too long"]
-    }
-    this.longUrlErrors.set(errors);
-    return errors.length === 0;
-  }
-
-  clearLongUrlErrors = (): void => {
-    this.longUrlErrors.set([]);
+  handleShortUrlUpdate(shortUrl: string): void {
+    console.log('Short URL updated:', shortUrl);
+    this.shortUrl.set(shortUrl);
   }
 }
