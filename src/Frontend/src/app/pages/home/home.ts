@@ -1,18 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { UrlShortenerApi } from '../core/services/urlshortener.api';
-import { copyToClipboard } from './urlshortener.functions';
+import { UrlShortenerApi } from '../../core/services/urlshortener.api';
+import { copyToClipboard } from './home.functions';
 
 const ShortUrlDefault: string = '...';
 
 @Component({
   imports: [FormsModule],
-  selector: 'app-urlshortener',
-  styleUrl: './urlshortener.css',
-  templateUrl: './urlshortener.html',
+  selector: 'app-home',
+  styleUrl: './home.css',
+  templateUrl: './home.html',
 })
-export class Urlshortener {
+export class Home {
   private readonly urlShortenerApi = inject(UrlShortenerApi);
 
   longUrl: string = '';
