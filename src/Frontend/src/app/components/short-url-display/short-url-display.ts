@@ -1,7 +1,6 @@
 import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { copyToClipboard } from '../../core/utilities/clipboard.functions';
-
-const ShortUrlDefault: string = '...';
+import { ShortUrlDefault } from '../../core/constants/urlshortener.constants';
 
 @Component({
   imports: [],

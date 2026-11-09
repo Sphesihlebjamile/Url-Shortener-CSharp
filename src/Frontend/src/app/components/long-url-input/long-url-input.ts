@@ -2,8 +2,7 @@ import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UrlShortenerApi } from '../../core/services/urlshortener.api';
 import { HttpErrorResponse } from '@angular/common/http';
-
-const ShortUrlDefault: string = '...';
+import { ShortUrlDefault } from '../../core/constants/urlshortener.constants';
 
 @Component({
   imports: [FormsModule],
