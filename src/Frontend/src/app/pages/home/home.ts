@@ -2,12 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UrlShortenerApi } from '../../core/services/urlshortener.api';
-import { copyToClipboard } from './home.functions';
+import { ShortUrlDisplay } from '../../components/short-url-display/short-url-display';
 
 const ShortUrlDefault: string = '...';
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, ShortUrlDisplay],
   selector: 'app-home',
   templateUrl: './home.html',
 })
@@ -65,13 +65,6 @@ export class Home {
     }
     this.longUrlErrors.set(errors);
     return errors.length === 0;
-  }
-
-  copyToClipboard = async (): Promise<void> => {
-    var response = await copyToClipboard(this.shortUrl())
-    if(!response){
-      alert("Failed to copy to clipboard");
-    }
   }
 
   clearLongUrlErrors = (): void => {
