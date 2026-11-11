@@ -4,10 +4,19 @@
         <header class="p-5">
           <h1 class="text-7xl font-bold">UrlShortener</h1>
         </header>
+        
         <!-- Shortener Input -->
         <app-long-url-input class="w-full" (shortUrl)="handleShortUrlUpdate($event)" />
+
         <!-- Shortener Output -->
         <app-short-url-display class="w-full" [shortUrl]="shortUrl" />
+
+        <!-- QR Code Display -->
+        @if(shortUrl() !== shortUrlDefault){
+            <div>
+            <app-qr-code class="w-full" [qrUrl]="shortUrl()" />
+          </div>
+        }
       </div>
     </div>
   </div>
